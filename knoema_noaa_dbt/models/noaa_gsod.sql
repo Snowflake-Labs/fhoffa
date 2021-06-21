@@ -10,7 +10,7 @@ select {{ dbt_utils.surrogate_key(['date', 'station_id']) }} rowid
   , *
 from (
     select "Stations", "Date", "Stations Name", "Country", "Indicator Name", "Value"
-    from {{ ref('source_knoema_noaa_gsod') }}
+    from {{ source('knoema_noaa', 'NOAACD2019R') }}
     {% if is_incremental() %}
       where "Date" > (select max(date) - 21 from {{ this }})
     {% endif %})
