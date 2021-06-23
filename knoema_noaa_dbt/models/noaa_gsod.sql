@@ -9,8 +9,9 @@
 with source_data as (
     select "Stations", "Date", "Stations Name", "Country", "Indicator Name", "Value"
     from {{ source('knoema_noaa', 'NOAACD2019R') }}
+    where "Measure" = 'M1'
     {% if is_incremental() %}
-      where "Date" > (select max(date) - 21 from {{ this }})
+      and "Date" > (select max(date) - 21 from {{ this }})
     {% endif %}
 )
 
